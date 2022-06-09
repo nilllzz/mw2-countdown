@@ -1,0 +1,86 @@
+body {
+    margin: 0;
+    background-color: black;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.app {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.app > div {
+    width: 100%;
+    max-width: 1000px;
+}
+
+.progress {
+    height: 150px;
+    position: sticky;
+    top: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    background-color: black;
+}
+
+.progress-bar {
+    width: 700px;
+    background-color: #d6d6d6;
+    height: 36px;
+    padding: 2px;
+    position: relative;
+}
+
+.progress-bar-progress {
+    height: 100%;
+    background-color: #79c22b;
+    width: 0;
+}
+
+.progress-bar-percent {
+    position: absolute;
+    top: 12px;
+    left: 35px;
+    font-weight: bold;
+    mix-blend-mode: difference;
+    z-index: 3;
+    color: white;
+}
+
+.dots {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    margin: 2px;
+}
+
+.dot-progress {
+    height: 10px;
+}
+
+.dot-complete {
+    background-color: #79c22b;
+}
+
+.dot-incomplete {
+    background-color: #253d0a;
+}
+
+.dots-counter {
+    color: white;
+}
+
+.dots-counter-complete {
+    color: #79c22b;
+    font-weight: bold;
+}
+
+.dots-counter-incomplete {
+    color: #253d0a;
+}

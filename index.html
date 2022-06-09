@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Modern Warfare 2 Countdown</title>
+
+    <!-- Include css styles -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Set favicon -->
+    <link rel="shortcut icon" type="image/png" href="favicon.png" />
+</head>
+
+<body>
+
+    <div class="app">
+
+        <div class="progress">
+            <div>
+                <img src="logo.png" width="200px" />
+            </div>
+            <div>
+                <div class="progress-bar">
+                    <div id="progress-bar-progress" class="progress-bar-progress"></div>
+                    <span class="progress-bar-percent" id="progress-bar-percent">0.0000%</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="dots" id="dots-container">
+
+        </div>
+
+        <div>
+            <span class="dots-counter">
+                <span class="dots-counter-complete" id="dots-counter-complete">0</span>
+                /
+                <span class="dots-counter-incomplete" id="dots-counter-incomplete">0</span>
+            </span>
+        </div>
+
+        <script>
+            const msInHour = 1000 * 60 * 60;
+
+            // Date+time of reveal trailer
+            const fromDate = Date.parse("2022-06-08 17:00:00+00:00");
+            // Game is set to release on October 28, time is just a guess based on reveal trailer reveal time
+            const toDate = Date.parse("2022-10-28 17:00:00+00:00");
+
+            const totalDiffMS = toDate - fromDate;
+
+            // Set up dots
+            const dotsEl = document.getElementById("dots-container");
+            const totalHours = Math.ceil(totalDiffMS / msInHour);
+
+            // For each hour between the two dates, create a progress dot.
+            for (let i = 0; i < totalHours; i++) {
+                const dotEl = document.createElement("div");
+                dotEl.className = "dot";
+                dotsEl.appendChild(dotEl);
+            }
+
+            const progressEl = document.getElementById('progress-bar-progress');
+            const progressPercentEl = document.getElementById('progress-bar-percent');
+
+            const dotsCounterCompleteEl = document.getElementById('dots-counter-complete');
+            const dotsCounterIncompleteEl = document.getElementById('dots-counter-incomplete');
+            dotsCounterIncompleteEl.innerText = totalHours;
+
+            function updateData() {
+                const currentDate = new Date(Date.now());
+                const elapsedDiffMS = currentDate - fromDate;
+
+                const progress = elapsedDiffMS / totalDiffMS;
+
+                // Update progress bar
+                progressEl.style.width = (progress * 100) + "%";
+                // Round to 4 decimal digits.
+                progressPercentEl.innerText = (Math.round(progress * 1000000) / 10000) + "%";
+
+                // Update dots
+                // How many hours have been completed so far.
+                let progressedHours = Math.floor(elapsedDiffMS / msInHour);
+                // Decimal (0-1) progress on current hour.
+                let currentHourProgress = (elapsedDiffMS % msInHour) / msInHour;
+
+                let markedDots = 0;
+                for (const dot of dotsEl.children) {
+                    // Mark completed dots with class.
+                    if (markedDots < progressedHours) {
+                        dot.className = "dot dot-complete";
+                    } else {
+                        dot.className = "dot dot-incomplete";
+                    }
+
+                    markedDots++;
+
+                    // Remove all child content of a dot, then create a child progress indicator
+                    // if this is the dot of the current hour.
+                    if (dot.hasChildNodes()) {
+                        dot.innerHTML = '';
+                    }
+                    if (markedDots == progressedHours + 1) {
+                        const dotProgressEl = document.createElement('div');
+                        dotProgressEl.className = "dot-progress dot-complete";
+                        // Total width is 10px.
+                        dotProgressEl.style.width = (currentHourProgress * 10) + "px";
+                        dot.append(dotProgressEl);
+                    }
+                }
+
+                dotsCounterCompleteEl.innerText = progressedHours;
+            }
+
+            updateData();
+
+            setInterval(updateData, 250);
+        </script>
+
+    </div>
+
+</body>
+
+</html>
