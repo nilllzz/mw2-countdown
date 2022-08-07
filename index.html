@@ -39,6 +39,44 @@
         </div>
 
         <script>
+            const importantDates = [
+                {
+                    name: "Announcement Video",
+                    fromDate: Date.parse("2022-06-08 17:00:00+00:00"),
+                    toDate: Date.parse("2022-06-08 18:00:00+00:00"),
+                },
+                {
+                    name: "CoD Champs teaser",
+                    fromDate: Date.parse("2022-08-07 20:00:00+00:00"),
+                    toDate: Date.parse("2022-08-07 21:00:00+00:00"),
+                },
+                {
+                    name: "Playstation Early Access Beta",
+                    fromDate: Date.parse("2022-09-15 17:00:00+00:00"),
+                    toDate: Date.parse("2022-09-16 17:00:00+00:00"),
+                },
+                {
+                    name: "Playstation Open Beta",
+                    fromDate: Date.parse("2022-09-17 17:00:00+00:00"),
+                    toDate: Date.parse("2022-09-19 17:00:00+00:00"),
+                },
+                {
+                    name: "Crossplay Early Access Beta",
+                    fromDate: Date.parse("2022-09-22 17:00:00+00:00"),
+                    toDate: Date.parse("2022-09-23 17:00:00+00:00"),
+                },
+                {
+                    name: "Crossplay Open Beta",
+                    fromDate: Date.parse("2022-09-24 17:00:00+00:00"),
+                    toDate: Date.parse("2022-09-26 17:00:00+00:00"),
+                },
+                {
+                    name: "Release",
+                    fromDate: Date.parse("2022-10-28 00:00:00+00:00"),
+                    toDate: Date.parse("2022-10-28 17:00:00+00:00"),
+                },
+            ];
+
             const msInHour = 1000 * 60 * 60;
 
             // Date+time of reveal trailer
@@ -75,7 +113,7 @@
                 // Update progress bar
                 progressEl.style.width = (progress * 100) + "%";
                 // Round to 4 decimal digits.
-                progressPercentEl.innerText = (Math.round(progress * 1000000) / 10000) + "%";
+                progressPercentEl.innerText = (Math.round(progress * 100000000) / 1000000).toString().padEnd(9, "0") + "%";
 
                 // Update dots
                 // How many hours have been completed so far.
@@ -85,11 +123,21 @@
 
                 let markedDots = 0;
                 for (const dot of dotsEl.children) {
+                    let dotClass = "dot";
+                    const dotTimeStart = fromDate + (markedDots * msInHour);
+                    const dotTimeEnd = dotTimeStart + msInHour;
+                    for (const importantDate of importantDates) {
+                        if (importantDate.fromDate <= dotTimeStart && dotTimeEnd <= importantDate.toDate) {
+                            dotClass = "dot-important";
+                            dot.title = importantDate.name;
+                        }
+                    }
+
                     // Mark completed dots with class.
                     if (markedDots < progressedHours) {
-                        dot.className = "dot dot-complete";
+                        dot.className = `dot ${dotClass}-complete`;
                     } else {
-                        dot.className = "dot dot-incomplete";
+                        dot.className = `dot ${dotClass}-incomplete`;
                     }
 
                     markedDots++;
@@ -101,7 +149,7 @@
                     }
                     if (markedDots == progressedHours + 1) {
                         const dotProgressEl = document.createElement('div');
-                        dotProgressEl.className = "dot-progress dot-complete";
+                        dotProgressEl.className = `dot-progress ${dotClass}-complete`;
                         // Total width is 10px.
                         dotProgressEl.style.width = (currentHourProgress * 10) + "px";
                         dot.append(dotProgressEl);
@@ -113,7 +161,7 @@
 
             updateData();
 
-            setInterval(updateData, 250);
+            setInterval(updateData, 100);
         </script>
 
     </div>
